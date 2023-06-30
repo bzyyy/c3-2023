@@ -5,17 +5,45 @@ exports.getAllCitiesRepository = () => {
 }
 
 exports.searchCitiesByCountryName = (inputCountryName) => {
-    const result = []
+    if (inputCountryName.length < 3) {
+      return {
+        message: 'El país debe tener al menos 3 caracteres',
+      };
+    }
+  
+    const result = [];
+    if (/^\d+$/.test(inputCountryName)) {
+      return {
+        message: 'Solo se aceptan caracteres no numericos',
+      };
+    }
     worldCitiesDataset.forEach((cityObject) => {
-        if(inputCountryName === cityObject.country) result.push(cityObject)
-    })
-    return result
-}
+      if (inputCountryName.toLowerCase() === cityObject.country.toLowerCase()) {
+        result.push(cityObject);
+      }
+    });
+  
+    if (result.length === 0) {
+      return {
+        message: 'No se encontraron ciudades para el pais ingresado',
+      };
+    }
+  
+    return {
+      data: result, // Retornar el resultado dentro de la propiedad 'data'
+    };
+  };
+  
 
 exports.searchCityByCityNameAndCountry = (inputCityName, inputCountryName) => {
-    const result = []
+    const result = [];
     worldCitiesDataset.forEach((cityObject) => {
-        if(inputCityName === cityObject.name && inputCountryName === cityObject.country) result.push(cityObject)
-    })
-    return result
-}
+        if (
+            inputCityName.toLowerCase() === cityObject.name.toLowerCase() &&
+            inputCountryName.toLowerCase() === cityObject.country.toLowerCase()
+        ){
+            result.push(cityObject);
+        }
+    });
+    return result;
+  };
